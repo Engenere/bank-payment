@@ -130,9 +130,13 @@ class AccountPaymentLineCreate(models.TransientModel):
         # Exclude lines that are already in a non-cancelled
         # and non-uploaded payment order; lines that are in a
         # uploaded payment order are proposed if they are not reconciled,
+        # ***
+        # Engenere: (l10n_brazil) nas remessas CNAB os pagamentos não são reconciliados na hora
+        # como acontece na gringa, por isso precisamos remover do filtro o que já foi enviado.
+        # ***
         paylines = self.env["account.payment.line"].search(
             [
-                ("state", "in", ("draft", "open", "generated")),
+                ("state", "in", ("draft", "open", "generated", "uploaded")),
                 ("move_line_id", "!=", False),
             ]
         )
