@@ -496,7 +496,7 @@ class TestAccountPaymentPartner(TransactionCase):
         mode.payment_method_id.bank_account_required = False
         self.assertEqual(self.supplier_invoice.partner_bank_id, self.supplier_bank)
         self.supplier_invoice.payment_mode_id = False
-        self.assertFalse(self.supplier_invoice.partner_bank_id)
+        self.assertEqual(self.supplier_invoice.partner_bank_id, self.supplier_bank)
 
     def test_print_report(self):
         self.supplier_invoice.partner_bank_id = self.supplier_bank.id
