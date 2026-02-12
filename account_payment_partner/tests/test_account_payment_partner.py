@@ -426,6 +426,13 @@ class TestAccountPaymentPartner(TransactionCase):
         )
         invoice.partner_bank_id = False
         invoice.action_post()
+        customer_bank = self.partner_bank_model.create(
+            {
+                "acc_number": "BE43798822936101",
+                "partner_id": self.customer.id,
+                "allow_out_payment": True,
+            }
+        )
         # Lets create a refund invoice for invoice_1.
         # I refund the invoice Using Refund Button.
         refund_invoice_wizard = (
@@ -453,7 +460,7 @@ class TestAccountPaymentPartner(TransactionCase):
             refund_invoice.payment_mode_id,
             invoice.payment_mode_id.refund_payment_mode_id,
         )
-        self.assertEqual(refund_invoice.partner_bank_id, invoice.partner_bank_id)
+        self.assertEqual(refund_invoice.partner_bank_id, customer_bank)
 
     def test_partner(self):
         self.customer.write({"customer_payment_mode_id": self.customer_payment_mode.id})
